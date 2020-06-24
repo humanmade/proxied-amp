@@ -1,0 +1,30 @@
+language: php
+
+services:
+    - mysql
+
+env:
+    global:
+        - WP_DB_USER=wordpress
+        - WP_DB_PASS=wordpress
+        - WP_DB_NAME=wp_tests
+
+php:
+    - 7.2
+
+matrix:
+    include:
+        - php: 7.2
+          env: WP_VERSION=5.3.2
+
+before_script:
+    - mysql -u root -e "GRANT ALL PRIVILEGES ON ${WP_DB_NAME}.* TO ${WP_DB_USER} IDENTIFIED BY '${WP_DB_PASS}';"
+    - mysql -u root -e "CREATE DATABASE ${WP_DB_NAME};"
+
+install:
+    - composer validate --strict
+    - composer install
+    - composer show
+
+script:
+    - composer test
