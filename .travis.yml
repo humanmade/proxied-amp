@@ -27,4 +27,5 @@ install:
     - composer show
 
 script:
+    - composer lint
     - composer test
