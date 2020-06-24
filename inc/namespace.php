@@ -9,4 +9,4 @@ namespace HM\Proxied_AMP;
  *
  * @return void
  */
-function bootstrap () : void {}
+function bootstrap() : void {}
