@@ -49,7 +49,7 @@ function force_http_amp_validation_request( bool $preempt, array $parsed_args, s
 	}
 
 	// Bail early if this is an external request.
-	if ( wp_parse_url( $url, PHP_URL_HOST) !== wp_parse_url( get_home_url(), PHP_URL_HOST ) ) {
+	if ( wp_parse_url( $url, PHP_URL_HOST ) !== wp_parse_url( get_home_url(), PHP_URL_HOST ) ) {
 		return $preempt;
 	}
 
@@ -59,7 +59,7 @@ function force_http_amp_validation_request( bool $preempt, array $parsed_args, s
 	/**
 	 * Filters scheme.
 	 *
-	 * @hook hm.proxied.amp.scheme
+	 * @hook hm_proxied_amp_scheme
 	 *
 	 * @param {string} $scheme      Current Scheme.
 	 * @param {bool}   $preempt     Whether to preempt an HTTP request's return value.
@@ -68,16 +68,18 @@ function force_http_amp_validation_request( bool $preempt, array $parsed_args, s
 	 *
 	 * @returns {string}
 	 */
-	$scheme = apply_filters( 'hm.proxied.amp.scheme', 'https', $preempt, $parsed_args, $url );
+	$scheme = apply_filters( 'hm_proxied_amp_scheme', 'https', $preempt, $parsed_args, $url );
 
 	/**
 	 * Filters Header Name.
+	 *
+	 * @hook hm_proxied_header_name
 	 *
 	 * @param {string} $header Header Name.
 	 *
 	 * @returns {string}
 	 */
-	$header_name = apply_filters( 'hm.proxied.header.name', 'Cloudfront-Forwarded-Proto' );
+	$header_name = apply_filters( 'hm_proxied_header_name', 'Cloudfront-Forwarded-Proto' );
 
 	// Add the Cloudfront-Forwarded-Proto header.
 	$parsed_args['headers'][ $header_name ] = $scheme;
@@ -85,15 +87,16 @@ function force_http_amp_validation_request( bool $preempt, array $parsed_args, s
 	/**
 	 * Fires after scheme is set.
 	 *
+	 * @hook hm_proxied_pre_http_request
+	 *
 	 * @param {array}  $parsed_args HTTP request arguments.
 	 * @param {string} $url         The request URL.
 	 */
-	do_action( 'hm.proxies.pre.http.request', $parsed_args, $url );
+	do_action( 'hm_proxied_pre_http_request', $parsed_args, $url );
 
 	// Make the request to http URL scheme instead of https.
 	return wp_remote_get( set_url_scheme( $url, 'http' ), $parsed_args );
 }
-
 
 /**
  * Add inline scripts added by Query Monitor to AMP dev mode.
@@ -110,9 +113,11 @@ function add_dev_mode_attributes( array $xpaths ) : array {
 	/**
 	 * Filters XPath element queries.
 	 *
+	 * @hook hm_proxied_amp_xpaths
+	 *
 	 * @param {array} $xpaths XPath element queries.
 	 */
-	$xpaths = apply_filters( 'hm.proxied.amp.xpaths', $xpaths );
+	$xpaths = apply_filters( 'hm_proxied_amp_xpaths', $xpaths );
 
 	return $xpaths;
 }
@@ -176,6 +181,23 @@ function get_all_deps( WP_Dependencies $dependencies, array $handles ) : array {
 			);
 		}
 	}
+
+	/**
+	 * Filters Dependency handles.
+	 *
+	 * @hook hm_proxied_qm_dependencies_handles
+	 *
+	 * @param {array}            $dependency_handles Dependency handles.
+	 * @param {WP_Dependencies}  $dependencies       Dependencies.
+	 * @param {array}            $handles            Handles.
+	 */
+	$dependency_handles = apply_filters(
+		'hm_proxied_qm_dependencies_handles',
+		$dependency_handles,
+		$dependencies,
+		$handles
+	);
+
 	return $dependency_handles;
 }
 
