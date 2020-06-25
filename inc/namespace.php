@@ -70,19 +70,18 @@ function force_http_amp_validation_request( bool $preempt, array $parsed_args, s
 	 */
 	$scheme = apply_filters( 'hm_proxied_amp_scheme', 'https', $preempt, $parsed_args, $url );
 
-	error_log( print_r( $parsed_args['headers'], true ) );
-
 	/**
 	 * Filters Header Name.
 	 *
 	 * @hook hm_proxied_header_name
 	 *
-	 * @param {string} $header      Header Name.
-	 * @param {array}  $parsed_args HTTP request arguments.
+	 * @param {string} $header Header Name.
 	 *
 	 * @returns {string}
 	 */
-	$header_name = apply_filters( 'hm_proxied_header_name', 'Cloudfront-Forwarded-Proto', $parsed_args );
+	$header_name = apply_filters( 'hm_proxied_header_name', 'Cloudfront-Forwarded-Proto' );
+
+	error_log( print_r( $parsed_args['headers'], true ) );
 
 	// Add the Cloudfront-Forwarded-Proto header.
 	$parsed_args['headers'][ $header_name ] = $scheme;
