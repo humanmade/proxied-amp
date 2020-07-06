@@ -1,0 +1,19 @@
+{
+	"name": "proxied-amp",
+	"version": "0.0.1",
+	"description": "Validate AMP Pages on Proxied Website",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/humanmade/proxied-amp.git"
+	},
+	"author": "Human Made",
+	"license": "GPL-2.0-or-later",
+	"bugs": {
+		"url": "https://github.com/humanmade/proxied-amp/issues"
+	},
+	"homepage": "https://github.com/humanmade/proxied-amp#readme",
+	"devDependencies": {},
+	"scripts": {},
+	"dependencies": {}
+}
