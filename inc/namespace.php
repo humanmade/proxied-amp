@@ -14,7 +14,7 @@ use WP_Dependencies;
  */
 function bootstrap() : void {
 	add_filter( 'pre_http_request', __NAMESPACE__ . '\\force_http_amp_validation_request', 10, 3 );
-	add_filter( 'amp_dev_mode_element_xpaths', __NAMESPACE__, '\\add_dev_mode_attributes' );
+	add_filter( 'amp_dev_mode_element_xpaths', __NAMESPACE__ . '\\add_dev_mode_attributes' );
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\make_query_monitor_scripts_dependent_on_admin_bar' );
 }
 
@@ -80,8 +80,6 @@ function force_http_amp_validation_request( bool $preempt, array $parsed_args, s
 	 * @returns {string}
 	 */
 	$header_name = apply_filters( 'hm_proxied_header_name', 'Cloudfront-Forwarded-Proto' );
-
-	error_log( print_r( $parsed_args['headers'], true ) );
 
 	// Add the Cloudfront-Forwarded-Proto header.
 	$parsed_args['headers'][ $header_name ] = $scheme;
